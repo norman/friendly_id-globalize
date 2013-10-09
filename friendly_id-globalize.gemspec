@@ -12,12 +12,12 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
   s.license       = 'MIT'
-  s.description   = 'Adds Globalize 3 support to the FriendlyId gem.'
+  s.description   = 'Adds Globalize support to the FriendlyId gem.'
 
   s.required_ruby_version = '>= 1.9.3'
 
   s.add_dependency 'friendly_id', '>= 5.0.0.beta4', '< 6.0'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'yard'
-  s.add_development_dependency "globalize3"
+  s.add_development_dependency "globalize"
 end
