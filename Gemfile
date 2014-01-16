@@ -4,7 +4,7 @@ gemspec
 
 # Database Configuration
 group :development, :test do
-  gem 'globalize3',  github: 'svenfuchs/globalize3', branch: 'rails4'
+  gem 'globalize',  github: 'globalize/globalize'
   gem 'paper_trail', github: 'airblade/paper_trail', branch: 'master'
   gem 'friendly_id', github: 'norman/friendly_id', branch: 'master'
 

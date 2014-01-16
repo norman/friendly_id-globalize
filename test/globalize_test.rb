@@ -3,13 +3,15 @@ require 'bundler/setup'
 require 'active_record'
 require 'friendly_id'
 require 'friendly_id/globalize'
-require 'globalize3'
+require 'globalize'
 require 'minitest/autorun'
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+I18n.enforce_available_locales = false
+Globalize.fallbacks = {:en => [:en, :de], :de => [:de, :en]}
 
 class Article < ActiveRecord::Base
-  translates :slug, :title
+  translates :slug, :title, fallbacks_for_empty_translations: true
   extend FriendlyId
   friendly_id :title, :use => [:slugged, :globalize]
 end
