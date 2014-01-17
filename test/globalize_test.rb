@@ -5,6 +5,7 @@ require 'friendly_id'
 require 'friendly_id/globalize'
 require 'globalize'
 require 'minitest/autorun'
+require 'pry'
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 I18n.enforce_available_locales = false
@@ -12,6 +13,8 @@ Globalize.fallbacks = {:en => [:en, :de], :de => [:de, :en]}
 
 class Article < ActiveRecord::Base
   translates :slug, :title, fallbacks_for_empty_translations: true
+  accepts_nested_attributes_for :translations
+
   extend FriendlyId
   friendly_id :title, :use => [:slugged, :globalize]
 end
@@ -20,10 +23,8 @@ class FriendlyIdGlobalizeTest < ActiveRecord::Migration
   def self.up
     create_table :articles do |t|
       t.string   :name
-      t.string   :slug
     end
 
-    add_index :articles, :slug, unique: true
     Article.create_translation_table! :slug => :string, :title => :string
   end
 end
@@ -91,6 +92,17 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should set all friendly ids for each nested translation" do
+    transaction do
+      article = Article.create!(translations_attributes: {
+        xx: { :title => "Guerra e pace", locale: 'it' },
+        yy: { title: 'Guerre et paix', locale: 'fr' }
+      })
+      I18n.with_locale(:it) { assert_equal "guerra-e-pace", article.friendly_id }
+      I18n.with_locale(:fr) { assert_equal "guerre-et-paix", article.friendly_id }
+    end
+  end
+
   # https://github.com/svenfuchs/globalize3/blob/master/test/globalize3/dynamic_finders_test.rb#L101
   # see: https://github.com/svenfuchs/globalize3/issues/100
   test "record returned by friendly_id should have all translations" do
@@ -106,3 +118,4 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     end
   end
 end
+

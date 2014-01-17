@@ -10,3 +10,6 @@ coverage
 *.rbc
 *.lock
 .rbx
+bin
+.bundle
+
