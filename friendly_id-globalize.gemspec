@@ -20,6 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'yard'
   s.add_development_dependency "globalize"
-  s.add_development_dependency "m", "~> 1.3.1"
 end
 

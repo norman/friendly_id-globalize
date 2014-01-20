@@ -107,7 +107,7 @@ current locale:
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
         slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
-        translation.slug= slug
+        translation.slug = slug
       end
     end
   end
