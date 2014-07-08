@@ -85,7 +85,7 @@ current locale:
 
     def set_friendly_id(text, locale = nil)
       ::Globalize.with_locale(locale || ::Globalize.locale) do
-        set_slug normalize_friendly_id(text)
+        set_slug (text)
       end
     end
 
