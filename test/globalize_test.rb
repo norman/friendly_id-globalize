@@ -5,7 +5,6 @@ require 'friendly_id'
 require 'friendly_id/globalize'
 require 'globalize'
 require 'minitest/autorun'
-require 'pry'
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 I18n.enforce_available_locales = false
@@ -58,13 +57,6 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     transaction do
       article = I18n.with_locale(:de) { Article.create!(:title => 'Der Herbst des Einsamen') }
       refute_nil article.friendly_id
-    end
-  end
-
-  test 'should allow nil friendly_ids' do
-    transaction do
-      article = I18n.with_locale(:de) { Article.create!(:title => nil) }
-      assert_nil article.reload.friendly_id
     end
   end
 
