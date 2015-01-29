@@ -4,6 +4,7 @@ gemspec
 
 # Database Configuration
 group :development, :test do
+  gem "globalize", git: "https://github.com/globalize/globalize", branch: "rails-4-2-upgrade"
   gem 'rake'
 
   platforms :jruby do
