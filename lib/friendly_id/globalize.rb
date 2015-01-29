@@ -94,7 +94,22 @@ current locale:
     end
 
     def set_slug(normalized_slug = nil)
-      ::Globalize.with_locale(::Globalize.locale) { super }
+      if self.translations.size > 1
+        self.translations.map(&:locale).each do |locale|
+          ::Globalize.with_locale(locale) { super_set_slug(normalized_slug) }
+        end
+      else
+        ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
+      end
+    end
+
+    def super_set_slug(normalized_slug = nil)
+      if should_generate_new_friendly_id?
+        candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
+        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        translation.slug = slug
+      end
     end
   end
 end
+
