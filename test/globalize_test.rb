@@ -7,8 +7,19 @@ require 'globalize'
 require 'minitest/autorun'
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
-I18n.enforce_available_locales = false
+::I18n.enforce_available_locales = false
 Globalize.fallbacks = {:en => [:en, :de], :de => [:de, :en]}
+
+class FriendlyIdGlobalizeTest < ActiveRecord::Migration
+  def self.up
+    create_table :articles do |t|
+      t.string   :name
+    end
+  end
+end
+
+ActiveRecord::Migration.verbose = false
+FriendlyIdGlobalizeTest.up
 
 class Article < ActiveRecord::Base
   translates :slug, :title, fallbacks_for_empty_translations: true
@@ -18,18 +29,7 @@ class Article < ActiveRecord::Base
   friendly_id :title, :use => [:slugged, :globalize]
 end
 
-class FriendlyIdGlobalizeTest < ActiveRecord::Migration
-  def self.up
-    create_table :articles do |t|
-      t.string   :name
-    end
-
-    Article.create_translation_table! :slug => :string, :title => :string
-  end
-end
-
-ActiveRecord::Migration.verbose = false
-FriendlyIdGlobalizeTest.up
+Article.create_translation_table! :slug => :string, :title => :string
 
 class Module
   def test(name, &block)
@@ -55,7 +55,7 @@ class GlobalizeTest < MiniTest::Unit::TestCase
 
   test 'should have a value for friendly_id after creation' do
     transaction do
-      article = I18n.with_locale(:de) { Article.create!(:title => 'Der Herbst des Einsamen') }
+      article = ::I18n.with_locale(:de) { Article.create!(:title => 'Der Herbst des Einsamen') }
       refute_nil article.friendly_id
     end
   end
