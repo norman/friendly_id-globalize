@@ -21,6 +21,8 @@ class Post < ActiveRecord::Base
   friendly_id :title, :use => :globalize
 end
 ```
+Note that call to `translates` must be made before calling `friendly_id`.
+
 ### Finds
 Finds will take the current locale into consideration:
 ```ruby
