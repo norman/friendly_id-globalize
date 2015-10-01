@@ -3,6 +3,12 @@
 [Globalize](https://github.com/globalize/globalize) support for
 [FriendlyId](https://github.com/norman/friendly_id).
 
+### Installation
+```ruby
+gem 'friendly_id-globalize'
+rails generate friendly_id_globalize
+```
+
 ### Translating Slugs Using Globalize
 The `FriendlyId::Globalize Globalize` module lets you use
 [Globalize](https://github.com/globalize/globalize) to translate slugs. This
