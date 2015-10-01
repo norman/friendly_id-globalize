@@ -129,7 +129,7 @@ method.
 
     def super_create_slug(locale)
       return unless friendly_id
-      return if slugs.first.try(:slug) == friendly_id
+      return if slugs.where(locale: locale).first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
       if friendly_id_config.uses?(:scoped)
