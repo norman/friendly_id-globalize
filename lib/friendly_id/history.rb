@@ -131,7 +131,7 @@ method.
       return unless friendly_id
       return if slugs.where(locale: locale).first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
-      relation = slugs.where(:slug => friendly_id)
+      relation = slugs.where(slug: friendly_id, locale: locale)
       if friendly_id_config.uses?(:scoped)
         relation = relation.where(:scope => serialized_scope)
       end
