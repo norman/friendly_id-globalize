@@ -118,12 +118,8 @@ method.
     end
 
     def create_slug
-      if self.translations.size > 1
-        self.translations.map(&:locale).each do |locale|
-          ::Globalize.with_locale(locale) { super_create_slug(locale) }
-        end
-      else
-        ::Globalize.with_locale(::Globalize.locale) { super_create_slug(locale) }
+      translations.map(&:locale).each do |locale|
+        ::Globalize.with_locale(locale) { super_create_slug(locale) }
       end
     end
 
