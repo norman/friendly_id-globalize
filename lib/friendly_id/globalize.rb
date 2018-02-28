@@ -1,4 +1,5 @@
 require 'i18n'
+require 'pry'
 
 module FriendlyId
 
@@ -98,9 +99,8 @@ current locale:
         self.translations.map(&:locale).each do |locale|
           ::Globalize.with_locale(locale) { super_set_slug(normalized_slug) }
         end
-      else
-        ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
       end
+      ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
     end
 
     def super_set_slug(normalized_slug = nil)
@@ -112,4 +112,3 @@ current locale:
     end
   end
 end
-
