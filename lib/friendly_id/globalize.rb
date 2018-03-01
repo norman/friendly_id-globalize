@@ -1,5 +1,4 @@
 require 'i18n'
-require 'pry'
 
 module FriendlyId
 
@@ -86,7 +85,7 @@ current locale:
 
     def set_friendly_id(text, locale = nil)
       ::Globalize.with_locale(locale || ::Globalize.locale) do
-        set_slug normalize_friendly_id(text)
+        super_set_slug normalize_friendly_id(text)
       end
     end
 
@@ -95,19 +94,20 @@ current locale:
     end
 
     def set_slug(normalized_slug = nil)
-      if self.translations.size > 1
-        self.translations.map(&:locale).each do |locale|
-          ::Globalize.with_locale(locale) { super_set_slug(normalized_slug) }
+      if self.translations.size > 0
+        self.translations.each do |t|
+          ::Globalize.with_locale(t.locale) { super_set_slug(normalized_slug) }
         end
+      else
+        ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
       end
-      ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
     end
 
     def super_set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
         slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
-        translation.slug = slug
+        translation.send("#{friendly_id_config.slug_column}=", slug)
       end
     end
   end
