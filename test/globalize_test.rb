@@ -22,14 +22,14 @@ ActiveRecord::Migration.verbose = false
 FriendlyIdGlobalizeTest.up
 
 class Article < ActiveRecord::Base
-  translates :slug, :title, fallbacks_for_empty_translations: true
+  translates :my_slug, :title, fallbacks_for_empty_translations: true
   accepts_nested_attributes_for :translations
 
   extend FriendlyId
-  friendly_id :title, :use => [:slugged, :globalize]
+  friendly_id :title, :use => :globalize, :slug_column => 'my_slug'
 end
 
-Article.create_translation_table! :slug => :string, :title => :string
+Article.create_translation_table! :my_slug => :string, :title => :string
 
 class Module
   def test(name, &block)
