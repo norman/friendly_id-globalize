@@ -95,8 +95,8 @@ current locale:
 
     def set_slug(normalized_slug = nil)
       if self.translations.size > 0
-        self.translations.each do |t|
-          ::Globalize.with_locale(t.locale) { super_set_slug(normalized_slug) }
+        self.translations.map(&:locale).each do |locale|
+          ::Globalize.with_locale(locale) { super_set_slug(normalized_slug) }
         end
       else
         ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
