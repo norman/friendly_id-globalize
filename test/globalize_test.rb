@@ -22,14 +22,14 @@ ActiveRecord::Migration.verbose = false
 FriendlyIdGlobalizeTest.up
 
 class Article < ActiveRecord::Base
-  translates :slug, :title, fallbacks_for_empty_translations: true
+  translates :my_slug, :title, fallbacks_for_empty_translations: true
   accepts_nested_attributes_for :translations
 
   extend FriendlyId
-  friendly_id :title, :use => [:slugged, :globalize]
+  friendly_id :title, :use => :globalize, :slug_column => 'my_slug'
 end
 
-Article.create_translation_table! :slug => :string, :title => :string
+Article.create_translation_table! :my_slug => :string, :title => :string
 
 class Module
   def test(name, &block)
@@ -77,21 +77,25 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     transaction do
       article = Article.create!(:title => "War and Peace")
       article.set_friendly_id("Guerra y paz", :es)
+      article.set_friendly_id("Guerra e pace", :it)
       article.save!
       found_article = Article.friendly.find('war-and-peace')
       I18n.with_locale(:es) { assert_equal "guerra-y-paz", found_article.friendly_id }
       I18n.with_locale(:en) { assert_equal "war-and-peace", found_article.friendly_id }
+      I18n.with_locale(:it) { assert_equal "guerra-e-pace", found_article.friendly_id }
     end
   end
 
   test "should set all friendly ids for each nested translation" do
     transaction do
       article = Article.create!(translations_attributes: {
-        xx: { :title => "Guerra e pace", locale: 'it' },
-        yy: { title: 'Guerre et paix', locale: 'fr' }
+        xx: { title: 'Guerra e pace', locale: 'it' },
+        yy: { title: 'Guerre et paix', locale: 'fr' },
+        zz: { title: 'Guerra y paz', locale: 'es' }
       })
       I18n.with_locale(:it) { assert_equal "guerra-e-pace", article.friendly_id }
       I18n.with_locale(:fr) { assert_equal "guerre-et-paix", article.friendly_id }
+      I18n.with_locale(:es) { assert_equal "guerra-y-paz", article.friendly_id }
     end
   end
 
@@ -110,4 +114,3 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     end
   end
 end
-
