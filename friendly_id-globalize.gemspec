@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_dependency 'friendly_id', '>= 5.2.0', '< 6.0'
+  s.add_dependency 'friendly_id', '>= 5.1.0', '< 6.0'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'yard'
   s.add_development_dependency "globalize"
