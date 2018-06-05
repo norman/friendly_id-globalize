@@ -70,7 +70,7 @@ method.
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
       model_class.class_eval do
-        has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
+        has_many :slugs, -> {order(Slug.arel_table[:id].desc)}, {
           :as         => :sluggable,
           :dependent  => :destroy,
           :class_name => Slug.to_s
