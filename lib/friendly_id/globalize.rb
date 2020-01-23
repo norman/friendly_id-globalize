@@ -7,7 +7,7 @@ module FriendlyId
 == Translating Slugs Using Globalize
 
 The {FriendlyId::Globalize Globalize} module lets you use
-Globalize[https://github.com/svenfuchs/globalize3] to translate slugs. This
+Globalize[https://github.com/globalize/globalize] to translate slugs. This
 module is most suitable for applications that need to be localized to many
 languages. If your application only needs to be localized to one or two
 languages, you may wish to consider the {FriendlyId::SimpleI18n SimpleI18n}
